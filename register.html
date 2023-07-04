@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#ab2923">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="csrf-token" content="844a727b4c21469e8e73538561852f997fb45233">
+  <meta name="google-site-verification" content="c_LAXHEHxcNq1-aJO5h6KHVhmuVz7pgsfx9HbbN7BXg" />
+    <meta name="description"
+    content="Fastest and easiest way to convert your airtime to cash. Accept payments for your business and services today using airtime." />
+  
+    <meta name="keywords"
+    content="Easiest way to convert airtime to cash in Nigeria, Make payment with airtime, Send and recieve payment in Nigeria with airtime, airtime is money, buy cheap data, MTN, Glo, 9mobile, Airtel, make payment for Gotv, Dstv" />
+    <meta property="og:image" content="assets/images/new/favicon.png">
+  <title>Create Account
+</title>
+  <link rel="stylesheet" href="assets/css/v2/styles2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2.5/fonts2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2/iziToast.min2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2/sweetalert2.min2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/fontawesome-free-6.1.2-web/css/all.min.css">
+  <link rel="icon" href="assets/images/new/atg-favicon.png">
+  <script src="assets/js/v2/alpine.persist.min.js" defer></script>
+  <script src="assets/js/v2/alpine.intersect.min.js" defer></script>
+  <script defer src="assets/js/v2/alpine.min.js"></script>
+  <script src="assets/js/axios.min2893.js?v=2.5.67"></script>
+  <script>const BASE_URL = 'index.html';</script>
+  <script src="assets/js/v2/iziToast.min2893.js?v=2.5.67"></script>
+  <script src="assets/js/v2/sweetalert2.all.min2893.js?v=2.5.67"></script>
+  <script src="assets/js/v2/utils2893.js?v=2.5.67"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90432823-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-90432823-1');
+  </script>
+
+    </head>
+
+
+<body class="font-body">
+  <main class="bg-white">
+  <div class="hidden p-5 lg:block lg:w-3/5 lg:fixed lg:inset-y-0 lg:right-0">
+    <div class="w-full h-full overflow-hidden border-2 border-atg rounded-2xl">
+      <div
+        class="relative w-full h-full bg-cover bg-[url('/assets/images/v2/hand-bg.jpg')]">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+      </div>
+    </div>
+  </div>
+  <div class="py-10 overflow-y-scroll bg-white lg:pt-40 lg:w-2/5 lg:fixed lg:inset-y-0 lg:left-0">
+
+    <div class="w-10/12 pt-10 mx-auto lg:w-8/12">
+      <div class="flex justify-center pb-10 lg:pb-16">
+        <a href="index.html">
+          <img
+            class="h-9"
+            src="assets/images/v2/SONIC_BEATZ-removebg-preview.png"
+            alt="Aimtoget">
+        </a>
+      </div>
+
+      <div class="lg:border lg:rounded-xl lg:p-10">
+        
+<div x-data="{
+  email: '',
+  is_loading: false,
+  has_verified_email: false,
+}">
+  <h1 class="text-2xl text-center lg:text-left font-medim">
+    Create An Account
+  </h1>
+  <div class="font-light text-center text-gray-700 lg:text-left">
+    Set up your account in minutes.
+  </div>
+
+  <template x-if="!has_verified_email">
+    <form
+      @submit.prevent="verify"
+      class="mt-10 space-y-6"
+      x-data="{
+        code: '',
+        email_verification_error: '',
+        has_sent_email_verification: false,
+        button_disabled() {
+          let { email, is_loading } = this
+          return !email || is_loading
+        },
+
+        verify() {
+          return this.has_sent_email_verification
+                  ? this.verifyEmail()
+                  : this.requestEmailVerification()
+        },
+        
+        requestEmailVerification() {
+          let uri = utils.api_endpoint('/user/register/verify_email')
+          let { email } = this
+          
+          this.is_loading = true
+          $http.post(uri, { email })
+            .then(({data}) => {
+              if(data.status === 'ok') {
+                return this.has_sent_email_verification = true
+              }
+
+              Notify.connectionError()
+            })
+            .catch(err => {
+              let { response } = err
+
+              if(!response) {
+                return 
+              }
+
+              let { data } = response
+              let { action } = data.data
+
+              if(action === 'LOGIN') {
+                return Notify.warning(
+                  data.msg,
+                  data.data.msg,
+                  () => location.href = 'https://aimtoget.com/login'
+                )
+              }
+
+              this.email_verification_error = data.data.msg
+            })
+            .finally(() => this.is_loading = false)
+        },
+
+        verifyEmail() {
+          let { code, email } = this
+          let params = { code, email }
+          
+          this.email_verification_error = ''
+          this.is_loading = true
+          let uri = utils.api_endpoint('/user/register/verify_email/otp')
+          $http.post(uri, params)
+            .then(({data}) => {
+              if(data.status === 'ok') {
+                return this.has_verified_email = true
+              }
+            })
+            .catch(err => {
+              let { response } = err
+              if(!response) {
+                return this.email_verification_error = err
+              }
+
+              this.email_verification_error = response.data.data.msg
+            })
+            .finally(() => this.is_loading = false)
+        }
+      }">
+      <div>
+        <label
+          for="email"
+          class="text-sm text-gray-500">
+          Email Address:
+        </label>
+        <input
+          id="email"
+          x-model="email"
+          type="email"
+          class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none focus:ring-1 ring-primary-100"
+          placeholder="Enter your valid email address"
+          :disabled="is_loading || has_verified_email || has_sent_email_verification"
+          required>
+      </div>
+      
+      <template x-if="has_sent_email_verification">
+        <div>
+          <label
+            for="email_code"
+            class="text-sm text-gray-500">
+            Verification Code:
+          </label>
+          <input
+            id="email_code"
+            x-model="code"
+            type="text"
+            class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none"
+            :class="email_verification_error ? 'ring-1 ring-red-500' : 'focus:ring-1 ring-primary-100'"
+            placeholder="Otp Sent to Email"
+            :disabled="is_loading || has_verified_email"
+            required>
+          <div
+            class="mt-1 text-xs text-red-500"
+            :class="email_verification_error ? '' : 'hidden'"
+            x-text="email_verification_error"></div>
+        </div>
+      </template>
+    
+      <div>
+        <button
+          :disabled="button_disabled()"
+          :class="button_disabled() ? 'opacity-60 cursor-not-allowed' : ''"
+          class="w-full p-3 text-white duration-300 rounded hover:shadow bg-atg">
+          <span
+            :class="is_loading ? 'hidden': ''">Continue</span>
+          <span :class="is_loading ? '': 'hidden'">
+            <i class="fa fa-circle-notch fa-spin"></i> Please wait...
+          </span>
+        </button>
+      </div>
+    </form>
+  </template>
+
+  <template x-if="has_verified_email">
+    <div>
+      <div
+        class="mt-10"
+        x-data="{
+          current_step: 1,
+          total_steps: 3,
+          firstname: '',
+          lastname: '',
+          username: '',
+          phone: '',
+          password2: '',
+          password: '',
+          username_status: '',
+          gotoStep(step) {
+            this.current_step > step ? this.current_step = step : ''
+          }
+        }">
+        <div class="my-10">
+          <div class="grid grid-cols-3 gap-x-5">
+            <template
+              x-for="step in total_steps">
+              <a
+                href="#"
+                @click.prevent="gotoStep(step)">
+                <div>
+                  <div
+                    class="text-xs text-center"
+                    x-text="`Step ${step}.`"></div>
+                  <div
+                    :class="current_step >= step ? 'bg-primary-400' : 'bg-gray-200'"
+                    class="h-2 mt-1 duration-500 rounded-lg"></div>
+                </div>
+              </a>
+              </template>
+          </div>
+        </div>      
+
+        <template x-if="current_step == 1">
+          <form
+            @submit.prevent="proceed"
+            action="#"
+            method="post"
+            x-init="() => {
+              $watch('phone', () => {
+                phone_error = ''
+                has_verified_phone = false
+              })
+            }"
+            x-data="{
+              phone_error: '',
+              has_verified_phone: false,
+              button_disabled() {
+                let { is_loading, phone } = this
+                return is_loading || !phone
+              },
+              proceed() {
+                !this.has_verified_phone ? this.verifyPhone() : this.current_step = 2
+              },
+              verifyPhone() {
+                this.is_loading = true
+                let { phone } = this
+                let uri = utils.api_endpoint('/user/register/verify_phone')
+                
+                $http.post(uri, { phone })
+                  .then(({data}) => {
+                    if(data.status === 'ok') {
+                     this.has_verified_phone = true
+                     return setTimeout(() => this.current_step = 2, 200)
+                    }
+                  })
+                  .catch(err => {
+                    let { response } = err
+                    if(!response) return
+                    this.phone_error = response.data.data.msg
+                  })
+                  .finally(() => this.is_loading = false)
+              }
+            }">
+            <div class="space-y-5">
+              <div>
+                <label
+                  for="phone"
+                  class="text-sm text-gray-500">
+                  Phone Number:
+                </label>
+                <input
+                  x-model="phone"
+                  id="phone"
+                  type="text"
+                  class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none focus:ring-1 ring-primary-100"
+                  :class="{'ring-1 ring-red-500': phone_error, 'ring-1 ring-green-500': has_verified_phone }"
+                  placeholder="Your phone number"
+                  :disabled="is_loading"
+                  required>
+                <div
+                  class="mt-1 text-xs text-red-500"
+                  :class="phone_error ? '' : 'hidden'"
+                  x-text="phone_error"></div>
+              </div>
+              <div class="pt-5">
+                <button
+                  :disabled="button_disabled()"
+                  :class="button_disabled() ? 'opacity-60 cursor-not-allowed' : ''"
+                  class="w-full p-3 text-white duration-300 rounded hover:shadow bg-atg">
+                  <span
+                    :class="is_loading ? 'hidden': ''">Continue</span>
+                  <span :class="is_loading ? '': 'hidden'">
+                    <i class="fa fa-circle-notch fa-spin"></i> Please wait...
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </template>
+
+        <template x-if="current_step == 2">
+          <form
+            action="#"
+            method="post"
+            @submit.prevent="proceed"
+            x-init="() => {
+              $watch('username', () => {
+                username_suggestions = []
+                username_status = ''
+              })
+            }"
+            x-data="{
+              username_suggestions: [],
+              username_status_cls() {
+                let { username_status } = this
+                let list = {
+                  'checking': 'fa fa-spin fa-circle-notch',
+                  'available': 'fa fa-check-circle text-green-500',
+                  'has_suggestions': 'fas fa-triangle-exclamation text-yellow-500'
+                }
+                return list[username_status]
+              },
+              checkUsernameAvailability() {
+                if(this.username_status === 'checking') {
+                  return
+                }
+                
+                this.is_loading = true
+                this.username_status = 'checking'
+                
+                let uri = utils.get_endpoint('/register/check-username')
+                let { firstname, lastname, username } = this
+                let params = { firstname, lastname, username }
+          
+                $http.post(uri, params)
+                  .then(({data}) => {
+                    
+                    if(data.data.available) {
+                      return this.username_status = 'available'
+                    }
+          
+                    this.username_status = 'has_suggestions'
+                    this.username_suggestions = data.data.suggestions
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+                  .finally(() => {
+                    this.is_loading = false
+                  })
+              },
+              chooseSuggestion(name) {
+                this.username = name
+                this.username_status = 'available'
+              },
+              proceed() {
+                let { username_status } = this
+                if(username_status === 'available') {
+                  return this.current_step = 3
+                }
+              },
+              button_disabled() {
+                let { is_loading, firstname, lastname, username, username_status } = this
+                return is_loading 
+                        || !(firstname && lastname && username)
+                        || username_status === 'has_suggestions'
+              }
+            }">
+            <div
+              class="space-y-5">
+              <div>
+                <label
+                  for="firstname"
+                  class="text-sm text-gray-500">
+                  Firstname:
+                </label>
+                <input
+                  x-model="firstname"
+                  id="firstname"
+                  type="text"
+                  class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none focus:ring-1 ring-primary-100"
+                  placeholder="Your first name"
+                  :disabled="is_loading"
+                  required>
+              </div>
+  
+              <div>
+                <label
+                  for="lastname"
+                  class="text-sm text-gray-500">
+                  Lastname:
+                </label>
+                <input
+                  x-model="lastname"
+                  id="lastname"
+                  type="text"
+                  class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none focus:ring-1 ring-primary-100"
+                  placeholder="Your last name"
+                  :disabled="is_loading"
+                  required>
+              </div>
+              
+              <div>
+                <label
+                  for="username"
+                  class="text-sm text-gray-500">
+                  Username:
+                </label>
+                <div
+                  class="flex w-full h-12 mt-2 overflow-hidden bg-white border rounded ring-primary-100 focus-within:ring-1">
+                  <input
+                    id="username"
+                    x-model="username"
+                    type="text"
+                    class="w-full px-2 bg-white outline-none ring-primary-100"
+                    @blur="checkUsernameAvailability"
+                    placeholder="Choose a username"
+                    :disabled="is_loading"
+                    required>
+                
+                    <div class="inline-flex items-center justify-center px-3">
+                      <i
+                        :class="username_status_cls"></i>
+                    </div>
+                </div>
+                <template x-if="'has_suggestions' == username_status">
+                  <div class="mt-3 text-xs">
+                    <div class="mb-3 font-light text-yellow-600">
+                      The username you chose has already been registered. Kindly choose another or choose from the suggestions below:
+                    </div>
+                    <template
+                      x-for="name in username_suggestions">
+                      <a
+                        @click.prevent="chooseSuggestion(name)"
+                        class="inline-block px-3 py-1 mr-2 font-medium text-gray-600 border rounded-lg"
+                        x-text="name"
+                        href="#"></a>
+                    </template>
+                  </div>
+                </template>
+                <div class="pt-5">
+                  <button
+                    :disabled="button_disabled()"
+                    :class="button_disabled() ? 'opacity-60 cursor-not-allowed' : ''"
+                    class="w-full p-3 text-white duration-300 rounded hover:shadow bg-atg">
+                    <span
+                      :class="is_loading ? 'hidden': ''">Continue</span>
+                    <span :class="is_loading ? '': 'hidden'">
+                      <i class="fa fa-circle-notch fa-spin"></i> Please wait...
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </template>
+        
+        <template x-if="current_step == 3">
+          <form
+            action="#"
+            method="post"
+            @submit.prevent="register"
+            x-data="{
+              readonly: true,
+              show: false,
+              button_disabled() {
+                let { password, password2, is_loading } = this
+                return is_loading || password.length < 6 || password !== password2
+              },
+              register() {
+                let {
+                  has_verified_email,
+                  firstname,
+                  lastname,
+                  username,
+                  email,
+                  phone,
+                  password,
+                  password2
+                } = this
+          
+                let params = {
+                  firstname,
+                  lastname,
+                  username,
+                  email,
+                  phone,
+                  pass1: password,
+                  pass2: password2,
+                  has_verified_email
+                }
+          
+                let uri = utils.get_endpoint('/register')
+                this.is_loading = true
+                $http.post(uri, params)
+                  .then(({data}) => {
+                    if(data.status === true) {
+                      return Notify.success(
+                        'Registration Successful',
+                        data.msg,
+                        () => {
+                          location.href = 'https://aimtoget.com/login'
+                        }
+                      )
+                    }
+          
+                    if(data.status === false) {
+                      return Notify.error(
+                        'Registration Error',
+                        data.msg,
+                        () => this.current_step = 3
+                      )
+                    }
+          
+                    Notify.connectionError()
+                  })
+                  .catch(err => {
+                    Notify.connectionError()
+                  })
+                  .finally(() => {
+                    this.is_loading = false
+                  })
+              }
+            }">
+            <div
+              class="space-y-5"
+              x-init="() => {
+                setTimeout(() => readonly = false, 600)
+              }">
+              <div
+                class="flex items-center p-3 space-x-3 text-sm text-gray-600 rounded-lg bg-yellow-50">
+                <div>
+                  <i class="fa fa-warning"></i>
+                </div>
+                <div>
+                  Password must contain at least 6 characters
+                </div>
+              </div>
+              <div>
+                <label
+                  for="password"
+                  class="text-sm text-gray-500">
+                  Password:
+                </label>
+                <div
+                  class="flex w-full h-12 mt-2 bg-white border rounded ring-primary-100 focus-within:ring-1">
+                  <input
+                    id="password"
+                    x-model="password"
+                    :type="show ? 'text' : 'password'"
+                    class="w-full px-2 bg-white outline-none ring-primary-100"
+                    placeholder="Your password"
+                    :readonly="readonly"
+                    :disabled="is_loading"
+                    required>
+          
+                  <a
+                    @click.prevent="show = !show"
+                    href="#"
+                    class="flex items-center px-3 text-gray-500 outline-none">
+                    <i
+                      class="fa"
+                      :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </a>
+                </div>
+              </div>
+              <div
+                <label
+                  for="password2"
+                  class="text-sm text-gray-500">
+                  Confirm Password:
+                </label>
+                <div
+                  class="flex w-full h-12 mt-2 bg-white border rounded ring-primary-100 focus-within:ring-1">
+                  <input
+                    id="password2"
+                    x-model="password2"
+                    :type="show ? 'text' : 'password'"
+                    class="w-full px-2 bg-white outline-none ring-primary-100"
+                    placeholder="Re-enter password"
+                    :readonly="readonly"
+                    :disabled="is_loading"
+                    required>
+          
+                  <a
+                    @click.prevent="show = !show"
+                    href="#"
+                    class="flex items-center px-3 text-gray-500 outline-none">
+                    <i
+                      class="fa"
+                      :class="show ? 'fa-eye-slash' : 'fa-eye'"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="pt-5">
+                <button
+                  :class="button_disabled() ? 'opacity-60 cursor-not-allowed' : ''"
+                  class="w-full p-3 text-white duration-300 rounded hover:shadow bg-atg">
+                  <span
+                    :class="is_loading ? 'hidden': ''">Continue</span>
+                  <span :class="is_loading ? '': 'hidden'">
+                    <i class="fa fa-circle-notch fa-spin"></i> Please wait...
+                  </span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </template>
+      </div>
+    </div>
+  </template>
+  <div class="pt-5 text-sm text-center">
+    Already signed up?
+    <a
+      href="login.html"
+      class="font-medium text-center text-atg hover:no-underline">
+      Login Now
+    </a>
+  </div>
+</div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

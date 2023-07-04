@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#ab2923">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="csrf-token" content="844a727b4c21469e8e73538561852f997fb45233">
+  <meta name="google-site-verification" content="c_LAXHEHxcNq1-aJO5h6KHVhmuVz7pgsfx9HbbN7BXg" />
+    <meta name="description"
+    content="Fastest and easiest way to convert your airtime to cash. Accept payments for your business and services today using airtime." />
+  
+    <meta name="keywords"
+    content="Easiest way to convert airtime to cash in Nigeria, Make payment with airtime, Send and recieve payment in Nigeria with airtime, airtime is money, buy cheap data, MTN, Glo, 9mobile, Airtel, make payment for Gotv, Dstv" />
+    <meta property="og:image" content="assets/images/new/favicon.png">
+  <title>Password Recovery
+</title>
+  <link rel="stylesheet" href="assets/css/v2/styles2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2.5/fonts2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2/iziToast.min2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/css/v2/sweetalert2.min2893.css?v=2.5.67"/>
+  <link rel="stylesheet" href="assets/fontawesome-free-6.1.2-web/css/all.min.css">
+  <link rel="icon" href="assets/images/new/atg-favicon.png">
+  <script src="assets/js/v2/alpine.persist.min.js" defer></script>
+  <script src="assets/js/v2/alpine.intersect.min.js" defer></script>
+  <script defer src="assets/js/v2/alpine.min.js"></script>
+  <script src="assets/js/axios.min2893.js?v=2.5.67"></script>
+  <script>const BASE_URL = 'index.html';</script>
+  <script src="assets/js/v2/iziToast.min2893.js?v=2.5.67"></script>
+  <script src="assets/js/v2/sweetalert2.all.min2893.js?v=2.5.67"></script>
+  <script src="assets/js/v2/utils2893.js?v=2.5.67"></script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90432823-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-90432823-1');
+  </script>
+
+    </head>
+
+
+<body class="font-body">
+  <main class="bg-white">
+  <div class="hidden p-5 lg:block lg:w-3/5 lg:fixed lg:inset-y-0 lg:right-0">
+    <div class="w-full h-full overflow-hidden border-2 border-atg rounded-2xl">
+      <div
+        class="relative w-full h-full bg-cover bg-[url('/assets/images/v2/hand-bg.jpg')]">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+      </div>
+    </div>
+  </div>
+  <div class="py-10 overflow-y-scroll bg-white lg:pt-40 lg:w-2/5 lg:fixed lg:inset-y-0 lg:left-0">
+
+    <div class="w-10/12 pt-10 mx-auto lg:w-8/12">
+      <div class="flex justify-center pb-10 lg:pb-16">
+        <a href="index.html">
+          <img
+            class="h-9"
+            src="assets/images/v2/SONIC_BEATZ-removebg-preview.png"
+            alt="Paylio">
+        </a>
+      </div>
+
+      <div class="lg:border lg:rounded-xl lg:p-10">
+        <h1 class="text-2xl text-center lg:text-left font-medim">
+  Password Recovery
+</h1>
+<div class="font-light text-center text-gray-700 lg:text-left">
+  Enter your username or email address to recover your password.
+</div>
+
+<form
+  @submit.prevent="request"
+  action="#"
+  method="post"
+  x-data="{
+    username: '',
+    loading: false,
+    request() {
+      let { username } = this
+      let params = { username }
+      let uri = utils.get_endpoint('/recovery/request')
+
+      this.loading = true
+      $http.post(uri, params)
+        .then(({data}) => {
+          if(data.status === true) {
+            return Notify.success('Success', data.msg, () => this.username = '')
+          }
+
+          if(data.status === false) {
+            return Notify.error('Error', data.msg)
+          }
+        })
+        .catch(err => {
+          Notify.connectionError()
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    }
+  }">
+  <div class="mt-10 space-y-5">
+    <div>
+      <label
+        for="username_email"
+        class="text-sm">
+        Username or Email:
+      </label>
+      <input
+        name="username"
+        x-model="username"
+        type="text"
+        class="w-full h-12 px-2 mt-2 bg-white border rounded outline-none focus:ring-1 ring-primary-100"
+        placeholder="Your useraname or email"
+        :disabled="loading"
+        required>
+    </div>
+
+    <div>
+      <button
+        :disabled="loading"
+        :class="loading ? 'opacity-60' : ''"
+        class="w-full p-3 text-white duration-300 rounded hover:shadow bg-atg">
+        <span :class="loading ? 'hidden': ''">Recover My Password</span>
+        <span :class="loading ? '': 'hidden'">
+          <i class="fa fa-circle-notch fa-spin"></i> Please wait...
+        </span>
+      </button>
+    </div>
+
+    <div class="text-sm text-center">
+      Don't have an account yet?
+      <a
+        href="register.html"
+        class="font-medium text-center text-atg hover:no-underline">
+        Sign Up Now
+      </a>
+    </div>
+  </div>
+</form>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
